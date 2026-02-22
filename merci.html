@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Message reçu — L'Atelier du Tattoo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4AF37;
+    --dark: #050505;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--dark);
+    color: #E8E8E0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  h1, .serif { font-family: 'Playfair Display', serif; }
+
+  /* Grain overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    z-index: 9999;
+  }
+
+  /* Ambient glow */
+  .glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,175,55,0.07) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  /* Card */
+  .card {
+    position: relative;
+    background: rgba(15,15,15,0.8);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 0.5px solid rgba(212,175,55,0.25);
+    padding: 3rem 2.5rem;
+    max-width: 440px;
+    width: calc(100% - 3rem);
+    text-align: center;
+    animation: fadeUp 1s ease forwards;
+  }
+
+  /* Corner decorations */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 24px; height: 24px;
+    border-top: 0.5px solid var(--gold);
+    border-left: 0.5px solid var(--gold);
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 24px; height: 24px;
+    border-bottom: 0.5px solid var(--gold);
+    border-right: 0.5px solid var(--gold);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse-gold {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.92); }
+  }
+
+  @keyframes drawLine {
+    from { width: 0; }
+    to { width: 48px; }
+  }
+
+  .gold-line {
+    height: 0.5px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    width: 48px;
+    margin: 1.5rem auto;
+    animation: drawLine 1.2s ease 0.4s both;
+  }
+
+  .icon-wrap {
+    width: 56px;
+    height: 56px;
+    border: 0.5px solid rgba(212,175,55,0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    animation: pulse-gold 3s ease infinite;
+  }
+
+  .section-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .btn-back {
+    display: inline-block;
+    border: 0.5px solid var(--gold);
+    color: var(--gold);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.85rem 2rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    transition: background 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+    margin-top: 2rem;
+    display: inline-block;
+  }
+  .btn-back:hover {
+    background: var(--gold);
+    color: var(--dark);
+  }
+
+  /* Logo */
+  .logo {
+    height: 52px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    margin: 0 auto 2rem;
+    display: block;
+    opacity: 0.9;
+  }
+</style>
+</head>
+<body>
+
+<div class="glow"></div>
+
+<div class="card">
+  <img src="logo.jpg" alt="L'Atelier du Tattoo" class="logo">
+
+  <div class="icon-wrap">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+  </div>
+
+  <span class="section-label">Message reçu</span>
+
+  <h1 class="serif text-3xl mt-3 leading-snug">
+    À très <em style="color:var(--gold);">bientôt.</em>
+  </h1>
+
+  <div class="gold-line"></div>
+
+  <p style="font-size:0.82rem;line-height:1.9;color:rgba(232,232,224,0.55);">
+    Votre projet a bien été transmis à l'atelier.<br>
+    Nat ou Max reviendront vers vous<br>dans les plus brefs délais.
+  </p>
+
+  <a href="/" class="btn-back">← Retour au site</a>
+</div>
+
+</body>
+</html>
