@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'Atelier du Tattoo — Sallanches</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4AF37;
+    --gold-light: #E8CC6A;
+    --dark: #050505;
+    --dark-2: #0F0F0F;
+    --dark-3: #1A1A1A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--dark);
+    color: #E8E8E0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .serif { font-family: 'Playfair Display', serif; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-track { background: var(--dark); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); }
+
+  /* Gold border utility */
+  .border-gold { border: 0.5px solid var(--gold); }
+  .border-gold-b { border-bottom: 0.5px solid rgba(212,175,55,0.3); }
+
+  /* Glassmorphism */
+  .glass {
+    background: rgba(15,15,15,0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 0.5px solid rgba(212,175,55,0.2);
+  }
+
+  /* Gold text */
+  .text-gold { color: var(--gold); }
+  .text-gold-light { color: var(--gold-light); }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes lineGrow {
+    from { width: 0; }
+    to { width: 60px; }
+  }
+  @keyframes pulse-gold {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .animate-fade-up { animation: fadeUp 0.9s ease forwards; }
+  .animate-fade-in { animation: fadeIn 1.2s ease forwards; }
+
+  .delay-1 { animation-delay: 0.2s; opacity: 0; }
+  .delay-2 { animation-delay: 0.4s; opacity: 0; }
+  .delay-3 { animation-delay: 0.6s; opacity: 0; }
+  .delay-4 { animation-delay: 0.8s; opacity: 0; }
+
+  /* Hero */
+  .hero-bg {
+    position: relative;
+    min-height: 100vh;
+    background: #050505;
+  }
+  .hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 40% at 50% 60%, rgba(212,175,55,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 30% 50% at 80% 20%, rgba(212,175,55,0.04) 0%, transparent 60%);
+  }
+  .hero-img-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.7) 100%);
+  }
+  .hero-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    filter: grayscale(20%) contrast(1.1);
+    transition: transform 8s ease;
+  }
+  .hero-img-wrap:hover img { transform: scale(1.03); }
+
+  /* Noise grain overlay */
+  .grain::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    z-index: 9999;
+  }
+
+  /* Gold line accent */
+  .gold-line {
+    height: 0.5px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    width: 100%;
+  }
+
+  /* Nav */
+  .nav-link {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(232,232,224,0.6);
+    transition: color 0.3s ease;
+    font-weight: 400;
+  }
+  .nav-link:hover { color: var(--gold); }
+
+  /* Section label */
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 400;
+  }
+
+  /* Artist card */
+  .artist-card {
+    position: relative;
+    overflow: hidden;
+    background: var(--dark-2);
+    border: 0.5px solid rgba(212,175,55,0.15);
+    transition: border-color 0.4s ease;
+  }
+  .artist-card:hover { border-color: rgba(212,175,55,0.5); }
+  .artist-card img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    filter: grayscale(30%);
+    transition: filter 0.5s ease, transform 0.6s ease;
+  }
+  .artist-card:hover img { filter: grayscale(0%); transform: scale(1.04); }
+  .artist-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(5,5,5,0.95) 0%, transparent 100%);
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  /* Portfolio masonry */
+  .masonry {
+    columns: 2;
+    column-gap: 8px;
+  }
+  @media (min-width: 768px) {
+    .masonry { columns: 4; column-gap: 12px; }
+  }
+  .masonry-item {
+    break-inside: avoid;
+    margin-bottom: 8px;
+    overflow: hidden;
+    position: relative;
+    border: 0.5px solid rgba(212,175,55,0.1);
+    transition: border-color 0.3s ease;
+  }
+  @media (min-width: 768px) {
+    .masonry-item { margin-bottom: 12px; }
+  }
+  .masonry-item:hover { border-color: rgba(212,175,55,0.5); }
+  .masonry-item img {
+    width: 100%;
+    display: block;
+    filter: grayscale(15%);
+    transition: filter 0.5s ease, transform 0.6s ease;
+  }
+  .masonry-item:hover img { filter: grayscale(0%); transform: scale(1.03); }
+  .masonry-item:nth-child(2) { margin-top: 40px; }
+  @media (min-width: 768px) {
+    .masonry-item:nth-child(3) { margin-top: 60px; }
+  }
+
+  /* CTA button */
+  .btn-gold {
+    display: inline-block;
+    border: 0.5px solid var(--gold);
+    color: var(--gold);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 0.85rem 2.5rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    transition: background 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+  }
+  .btn-gold:hover {
+    background: var(--gold);
+    color: var(--dark);
+  }
+
+  /* Contact section */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  @media (min-width: 768px) {
+    .contact-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Map placeholder */
+  .map-placeholder {
+    background: var(--dark-2);
+    border: 0.5px solid rgba(212,175,55,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    position: relative;
+    overflow: hidden;
+  }
+  .map-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(212,175,55,0.05) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(212,175,55,0.05) 40px);
+  }
+
+  /* Input */
+  .form-input {
+    background: transparent;
+    border: none;
+    border-bottom: 0.5px solid rgba(212,175,55,0.3);
+    color: #E8E8E0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 0.85rem;
+    padding: 0.75rem 0;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  .form-input::placeholder { color: rgba(232,232,224,0.3); letter-spacing: 0.1em; }
+  .form-input:focus { border-bottom-color: var(--gold); }
+
+  /* Decorative corner */
+  .corner-tl::before, .corner-tl::after,
+  .corner-br::before, .corner-br::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+  }
+  .corner-tl::before { top: 0; left: 0; border-top: 0.5px solid var(--gold); border-left: 0.5px solid var(--gold); }
+  .corner-br::after { bottom: 0; right: 0; border-bottom: 0.5px solid var(--gold); border-right: 0.5px solid var(--gold); }
+</style>
+</head>
+<body class="grain">
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 glass">
+  <div class="max-w-6xl mx-auto px-6 py-2 flex items-center justify-between">
+    <a href="#" style="display:flex;align-items:center;">
+      <img src="img/logo.jpg" alt="L'Atelier du Tattoo" style="height:80px;width:auto;object-fit:contain;filter:brightness(1.1);border-radius:12px;">
+    </a>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#artistes" class="nav-link">Artistes</a>
+      <a href="#portfolio" class="nav-link">Portfolio</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+    <a href="#contact" class="btn-gold text-xs py-2 px-4">Réserver</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-bg flex flex-col min-h-screen">
+  <div class="flex-1 grid md:grid-cols-2 pt-24">
+    <div class="flex flex-col justify-center px-8 md:px-16 lg:px-24 py-16 animate-fade-up delay-1 order-2 md:order-1">
+      <span class="section-label mb-6">Tatouage — Sallanches, Haute-Savoie</span>
+      <h1 class="serif text-5xl md:text-6xl lg:text-7xl leading-tight mb-6">
+        L'Art<br/>
+        <em style="color:var(--gold);">gravé</em><br/>
+        sur peau.
+      </h1>
+      <div style="height:0.5px;width:60px;background:var(--gold);margin-bottom:1.5rem;"></div>
+      <p class="text-sm leading-loose" style="color:rgba(232,232,224,0.6);max-width:380px;">
+        Un atelier où chaque trait raconte une histoire. Fineline délicat ou Blackwork audacieux — nos artistes transforment vos idées en œuvres permanentes.
+      </p>
+      <div class="flex gap-4 mt-10">
+        <a href="#portfolio" class="btn-gold">Voir le portfolio</a>
+        <a href="#contact" class="btn-gold" style="background:var(--gold);color:var(--dark);">Prendre RDV</a>
+      </div>
+      <div class="flex gap-8 mt-12">
+        <div>
+          <div class="serif text-3xl text-gold">2</div>
+          <div style="font-size:0.65rem;letter-spacing:0.15em;color:rgba(232,232,224,0.4);text-transform:uppercase;margin-top:4px;">Artistes</div>
+        </div>
+        <div style="width:0.5px;background:rgba(212,175,55,0.2);"></div>
+        <div>
+          <div class="serif text-3xl text-gold">+8</div>
+          <div style="font-size:0.65rem;letter-spacing:0.15em;color:rgba(232,232,224,0.4);text-transform:uppercase;margin-top:4px;">Ans d'expérience</div>
+        </div>
+        <div style="width:0.5px;background:rgba(212,175,55,0.2);"></div>
+        <div>
+          <div class="serif text-3xl text-gold">∞</div>
+          <div style="font-size:0.65rem;letter-spacing:0.15em;color:rgba(232,232,224,0.4);text-transform:uppercase;margin-top:4px;">Styles</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-img-wrap order-1 md:order-2" style="max-height:100vh;">
+      <img src="img/team.jpg" alt="L'équipe de l'Atelier du Tattoo" style="height:100%;min-height:60vh;">
+    </div>
+  </div>
+  <div class="gold-line"></div>
+</section>
+
+<!-- ARTISTES -->
+<section id="artistes" class="py-24 px-6 md:px-12 max-w-6xl mx-auto">
+  <div class="mb-16 animate-fade-up delay-1">
+    <span class="section-label">Nos Artistes</span>
+    <h2 class="serif text-4xl md:text-5xl mt-3">Deux visions,<br/><em class="text-gold">un seul atelier.</em></h2>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    <!-- Nat -->
+    <div class="artist-card animate-fade-up delay-2">
+      <div style="overflow:hidden;">
+        <img src="img/nat.jpg" alt="Nat — Artiste Fineline">
+      </div>
+      <div class="artist-overlay">
+        <div style="width:30px;height:0.5px;background:var(--gold);margin-bottom:12px;"></div>
+        <span class="section-label" style="font-size:0.6rem;">Dot Work · Fineline · Noir & Gris</span>
+        <h3 class="serif text-2xl mt-2">Nat</h3>
+        <p class="text-xs mt-2" style="color:rgba(232,232,224,0.5);line-height:1.7;">
+          Tatoueuse depuis 2021, spécialisée dans le dot work et le fineline noir et gris. Chaque aiguille posée est un point de précision, chaque trait une intention.
+        </p>
+        <div class="flex items-center gap-4 mt-3">
+          <a href="https://www.instagram.com/blacknattattoo/" target="_blank" style="font-size:0.65rem;letter-spacing:0.1em;color:var(--gold);">@blacknattattoo</a>
+          <span style="color:rgba(232,232,224,0.3);font-size:0.65rem;">·</span>
+          <a href="tel:0643142770" style="font-size:0.65rem;color:rgba(232,232,224,0.5);">06 43 14 27 70</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Max -->
+    <div class="artist-card animate-fade-up delay-3">
+      <div style="overflow:hidden;">
+        <img src="img/max.jpg" alt="Max — Artiste Blackwork">
+      </div>
+      <div class="artist-overlay">
+        <div style="width:30px;height:0.5px;background:var(--gold);margin-bottom:12px;"></div>
+        <span class="section-label" style="font-size:0.6rem;">Blackwork · Semi-Réalisme · Touche Asiatique</span>
+        <h3 class="serif text-2xl mt-2">Max</h3>
+        <p class="text-xs mt-2" style="color:rgba(232,232,224,0.5);line-height:1.7;">
+          Tatoueur depuis 2021, spécialisé dans le blackwork et le semi-réalisme avec une touche asiatique marquée. Un univers graphique dense, entre ombre et puissance.
+        </p>
+        <div class="flex items-center gap-4 mt-3">
+          <a href="https://www.instagram.com/weecketattoo/" target="_blank" style="font-size:0.65rem;letter-spacing:0.1em;color:var(--gold);">@weecketattoo</a>
+          <span style="color:rgba(232,232,224,0.3);font-size:0.65rem;">·</span>
+          <a href="tel:0667411992" style="font-size:0.65rem;color:rgba(232,232,224,0.5);">06 67 41 19 92</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line opacity-30"></div>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" class="py-24 px-6 md:px-12 max-w-6xl mx-auto">
+  <div class="flex items-end justify-between mb-16">
+    <div>
+      <span class="section-label">Portfolio</span>
+      <h2 class="serif text-4xl md:text-5xl mt-3">Œuvres<br/><em class="text-gold">permanentes.</em></h2>
+    </div>
+    <a href="#contact" class="btn-gold hidden md:inline-block">Votre projet →</a>
+  </div>
+
+  <div class="masonry">
+    <div class="masonry-item">
+      <img src="img/tatoo1.jpg" alt="Tatouage 1">
+    </div>
+    <div class="masonry-item">
+      <img src="img/tatoo2.jpg" alt="Tatouage 2">
+    </div>
+    <div class="masonry-item">
+      <img src="img/tatoo3.jpg" alt="Tatouage 3">
+    </div>
+    <div class="masonry-item">
+      <img src="img/tatoo4.jpg" alt="Tatouage 4">
+    </div>
+  </div>
+
+  <div class="text-center mt-12 md:hidden">
+    <a href="#contact" class="btn-gold">Votre projet →</a>
+  </div>
+</section>
+
+<div class="gold-line opacity-30"></div>
+
+<!-- CONTACT -->
+<section id="contact" class="py-24">
+  <div class="max-w-6xl mx-auto px-6 md:px-12">
+    <div class="mb-16">
+      <span class="section-label">Contact & Localisation</span>
+      <h2 class="serif text-4xl md:text-5xl mt-3">Prenons<br/><em class="text-gold">rendez-vous.</em></h2>
+    </div>
+
+    <div class="contact-grid">
+      <!-- Form -->
+      <div class="glass p-8 md:p-12 relative corner-tl corner-br">
+        <div class="space-y-8">
+          <div>
+            <label style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);">Votre prénom</label>
+            <input type="text" placeholder="Camille" class="form-input mt-2">
+          </div>
+          <div>
+            <label style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);">Email</label>
+            <input type="email" placeholder="camille@email.com" class="form-input mt-2">
+          </div>
+          <div>
+            <label style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);">Votre projet</label>
+            <textarea placeholder="Décrivez votre idée..." class="form-input mt-2" rows="3" style="resize:none;"></textarea>
+          </div>
+          <button class="btn-gold w-full text-center">Envoyer la demande</button>
+        </div>
+      </div>
+
+      <!-- Info + Map -->
+      <div class="flex flex-col gap-0 mt-6 md:mt-0 md:ml-8">
+        <div class="glass p-8 mb-6">
+          <div class="space-y-6">
+            <div>
+              <div class="section-label mb-2">Adresse</div>
+              <p class="text-sm" style="color:rgba(232,232,224,0.7);">Rue de Savoie<br/>74700 Sallanches, Haute-Savoie</p>
+            </div>
+            <div style="height:0.5px;background:rgba(212,175,55,0.15);"></div>
+            <div>
+              <div class="section-label mb-2">Horaires</div>
+              <p class="text-sm" style="color:rgba(232,232,224,0.7);">Mardi — Samedi : 10h — 19h<br/>Sur rendez-vous uniquement</p>
+            </div>
+            <div style="height:0.5px;background:rgba(212,175,55,0.15);"></div>
+            <div>
+              <div class="section-label mb-2">Instagram</div>
+              <a href="https://www.instagram.com/latelier.du.tattoo/" target="_blank" class="text-sm text-gold hover:text-gold-light transition-colors">@latelier.du.tattoo</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-placeholder flex-1">
+          <div class="relative z-10 text-center">
+            <div style="width:8px;height:8px;background:var(--gold);border-radius:50%;margin:0 auto;animation:pulse-gold 2s ease infinite;"></div>
+            <p class="serif italic text-gold text-sm mt-3">Rue de Savoie, Sallanches</p>
+            <a href="https://maps.google.com/?q=Rue+de+Savoie,+Sallanches" target="_blank" class="btn-gold mt-4 text-xs py-2 px-4 inline-block">Ouvrir dans Maps</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- FOOTER -->
+<footer class="py-8 px-6 md:px-12">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+    <div>
+      <img src="img/logo.jpg" alt="L'Atelier du Tattoo" style="height:30px;width:auto;object-fit:contain;filter:brightness(1.1);">
+    </div>
+    <p style="font-size:0.65rem;letter-spacing:0.1em;color:rgba(232,232,224,0.3);">© 2026 — Sallanches, Haute-Savoie</p>
+    <div class="flex gap-6">
+      <a href="#artistes" class="nav-link">Artistes</a>
+      <a href="#portfolio" class="nav-link">Portfolio</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Intersection Observer for scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) {
+        el.target.style.animation = 'fadeUp 0.9s ease forwards';
+        el.target.style.opacity = '1';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.animate-fade-up').forEach(el => {
+    el.style.opacity = '0';
+    observer.observe(el);
+  });
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
