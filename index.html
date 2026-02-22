@@ -435,21 +435,23 @@
     <div class="contact-grid">
       <!-- Form -->
       <div class="glass p-8 md:p-12 relative corner-tl corner-br">
-        <div class="space-y-8">
+        <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" class="space-y-8">
+          <input type="hidden" name="form-name" value="contact">
+          <p style="display:none;"><input name="bot-field"></p>
           <div>
-            <label style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);">Votre prénom</label>
-            <input type="text" placeholder="Camille" class="form-input mt-2">
+            <label for="prenom" style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);">Votre prénom</label>
+            <input id="prenom" type="text" name="prenom" placeholder="Camille" class="form-input mt-2" required>
           </div>
           <div>
-            <label style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);">Email</label>
-            <input type="email" placeholder="camille@email.com" class="form-input mt-2">
+            <label for="email" style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);">Email</label>
+            <input id="email" type="email" name="email" placeholder="camille@email.com" class="form-input mt-2" required>
           </div>
           <div>
-            <label style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);">Votre projet</label>
-            <textarea placeholder="Décrivez votre idée..." class="form-input mt-2" rows="3" style="resize:none;"></textarea>
+            <label for="projet" style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);">Votre projet</label>
+            <textarea id="projet" name="projet" placeholder="Décrivez votre idée..." class="form-input mt-2" rows="3" style="resize:none;" required></textarea>
           </div>
-          <button class="btn-gold w-full text-center">Envoyer la demande</button>
-        </div>
+          <button type="submit" class="btn-gold w-full text-center">Envoyer la demande</button>
+        </form>
       </div>
 
       <!-- Info + Map -->
